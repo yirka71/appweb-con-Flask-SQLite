@@ -1,0 +1,33 @@
+<html>
+<head>
+<title>db.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+db.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">sqlalchemy </span><span class="s0">import </span><span class="s1">create_engine</span>
+<span class="s0">from </span><span class="s1">sqlalchemy.orm </span><span class="s0">import </span><span class="s1">sessionmaker</span>
+<span class="s0">from </span><span class="s1">sqlalchemy.ext.declarative </span><span class="s0">import </span><span class="s1">declarative_base</span>
+
+<span class="s2"># El engine permite a SQLAlchemy comunicarse con la base de datos, una BDD especifica</span>
+<span class="s2"># https://docs.sqlalchemy.org/en/14/core/engines.html</span>
+<span class="s1">engine = create_engine(</span><span class="s3">&quot;sqlite:///database/tareas.db&quot;</span><span class="s0">,</span><span class="s1">connect_args={</span><span class="s3">&quot;check_same_thread&quot;</span><span class="s1">:</span><span class="s0">False</span><span class="s1">})</span>
+<span class="s2">#Le dice a sqlitealchemy a que motor de BDD se va a conectar, OracledB, sqlite, microsoft service</span>
+<span class="s2">#mysqlite</span>
+
+<span class="s1">Session = sessionmaker(bind=engine)</span>
+<span class="s1">session = Session()</span>
+<span class="s1">Base = declarative_base()</span>
+</pre>
+</body>
+</html>

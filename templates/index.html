@@ -1,0 +1,138 @@
+<!--COMENTARIO -->
+<!--EN LA CARPETA TEMPLATE VAN TODOS LOS FICHEROS HTML, FLASK LO DETERMINA -->
+<!--El fichero index es el fichero de la ruta raiz, el que se va a cargar lo primero -->
+<!--El la carpeta static van todos los ficheros, imagenes, videos etc menos html -->
+<!--Usaremos Bootstrap para los estilos, buscad lo mas parecido a lo que quereis -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head><!--el head es la parte no visible de la pagina web-->
+    <meta charset="UTF-8">
+    <title>App Gestor de Tareas</title>
+    <!--Estoy copiando mi plantilla o tema  preconfigurado de Bootstrap-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/flatly/bootstrap.min.css" integrity="sha384-qF/QmIAj5ZaYFAeQcrQ6bfVMAh4zZlrGwTPY7T/M+iTTLJqJBJjwwnsE5Y0mV7QK" crossorigin="anonymous">
+
+   <!--Fuente, tipografias de Google Fonts:Permanent Market-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+
+     <!--Hoja de estilo propia-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css')}}">
+    <!--se tiene que enlazar este fichero css con mi fichero html del index
+    que contiene la etiqueta body.Recordar que es flask  quien controla la
+    forma de escribir las instrucciones.Esta vinculacion se escribe siempre en el head-->
+    <!--p1,p2..:parrafo de texto simple -->
+    <!--h1,h2..:titulo en grande -->
+
+    <!-- Font Awesome -->
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/fontawesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+
+</head>
+<body> <!--Aqui ira todo el grueso de la programación-->
+  <h1 class="display-4 text-center mt-4 titulo">App de Gestión de Tareas</h1>
+<!--Aqui tengo 3 clases de Bootstrap y una propia (titulo)-->
+  <div class="row">
+     <div class="col-md-4 offset-md-4 my-auto">
+         <div class="card">
+
+
+                <!--Aqui tengo 3 clases de Bootstrap y una propia (titulo)-->
+                <div class="card-header"> <!--div crea cajones, es la forma de ordenar lass cosas con html -->
+                    <form action="/crear-tarea" method="post"> <!--me muevo a una URL nueva-->
+                        <!-- Separamos el input del boton metiendo el input en este form-group
+                        para que los elementos no esten pegados y haya separacion entre ellos -->
+                        <div class="form-group">
+                            <input type="text" name = "contenido_tarea" placeholder="Tarea" class="form-control" autofocus>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block"> <!-- btn-block hace que el boton
+                                                                           ocupe todo el ancho -->
+                            Guardar
+                        </button>
+                    </form>
+                </div>
+
+<div class="card-body">
+    <!-- Las etiquetas <ul> y <li> sirven para crear listas en HTML -->
+    <ul class="list-group">
+        <!-- Gracias a Jinja se puede introducir codigo Python en nuestro HTML y
+Python se encarga de ejecutarlo e interpretarlo -->
+        {% for tarea in lista_de_tareas %}
+        <li class="list-group-item">
+            <span class="{% if tarea.hecha==true %} tarea_hecha {% endif %}"> {{tarea.contenido}} </span>
+            <a href="/tarea-hecha/{{tarea.id}}" style="text-decoration: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="green" class="bi bi-check2-square" viewBox="0 0 16 16">
+                    <path
+                        d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3
+1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-
+.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z"
+                    />
+                    <path
+                        d="M8.354 10.354l7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354
+6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"
+                    />
+                </svg>
+            </a>
+            <a href="/eliminar-tarea/{{tarea.id}}" style="text-decoration: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="red" class="bi bi-trash" viewBox="0 0 16 16">
+                    <path
+                        d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1
+.5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0
+0-1 0v6a.5.5 0 0 0 1 0V6z"
+                    />
+                    <path
+                        fill-rule="evenodd"
+                        d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0
+1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0
+0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-
+1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                    />
+                </svg>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+         </div>
+     </div>
+  </div>
+</body>
+</html>
+
+<!--Todo lo que se abre se debe cerrar con el simbolo de-->
+<!--cada fichero html tiene asociado un fichero de estilo css son complementarios
+hay dos opciones si el fichero es grande se pueden crear varios ficheros html y css
+y asociarlos-->
+
+<!--cuando en mi html accedo a traves del atricuto class, en mi css voy a acceder a las variables precedidas por un
+punto .y cuando en mi html haga referencia a mi atributo id, en mi css voy a acceder a las variables precedidas por
+una almohadilla  #,si queremos aplicar un estilo a algo especifico se hace a traves de la almohadilla en CSS y para
+algo mas general las clases, es mas habitual usar clases por eso todo lo de Bootstrap se hace a traves de clases-->
+
+<!--lo bueno de las clases es que yo puedo mezclar mis clases con las clases de Bootstrap-->
+
+<!--En la parte del header necesito añadir un cajón de texto y un botón, siempre que tengamos algún tipo de input de
+información y un botón al final para lanzar esa información a algún sitio eso siempre será un formulario en HTML.
+Es el formulario (llaves form) el que tiene que mandar la información del input a  algún lado.En action es donde le voy
+a indicar a donde quiero enviar la informacion-->
+
+<!--El autofocus, es el foco de nuestra web, donde parpadear el cursor al refrescar la web-->
+
+<!--Si en <button type="submit" que esta dentro del form indico Summit el formulario me va a enviar los datos que
+haya insertado en el input al lugar que yo indique en el <form action="">.-->
+
+<!--Bootstrap funcionan con filas, por eso lo primero que le indicamos es que tendremos x una filas,
+vamos a indicarle que en la primera fila (se aprecia diferente color sutil) metemos una tarjeta etc, podemos
+trabajar a nivel de filas y columnas de manera muy personalizada. Yo defino una fila y dentro de esa fila
+defino como y donde quiero que se coloque la informacion que hay dentro-->
+
+<!--Bootstrap como maximo puede dividir nuestra pantalla en 12 columnas, si le digo divideme la pantalla en 4, de
+esas 12 columnas saca 4, cada columna es de 3 columnas 4x3=12, con esas divisiones es como centramos y mas
+ personalizacion conseguimos etc-->.
+
+<!--El nombre de variable contenido_tarea que hay en el formulario es muy importante porque es donde se guardara lo
+ que yo tenga en el botón guardar.Podemos tener varios inputs de tipo texto en el primer cajon-->
+
+<!--Junto a nuestro contenido añado dos botones uno para eliminar tarea y uno para decir que la tarea está hecha.
+En HTML añado enlaces con la etiqueta a, y en href añado el enlace de a donde quiero ir.

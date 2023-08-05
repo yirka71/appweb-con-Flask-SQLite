@@ -1,0 +1,129 @@
+<html>
+<head>
+<title>main.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+main.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">flask </span><span class="s0">import </span><span class="s1">Flask</span><span class="s0">, </span><span class="s1">render_template</span><span class="s0">, </span><span class="s1">request</span><span class="s0">, </span><span class="s1">redirect</span><span class="s0">, </span><span class="s1">url_for</span>
+<span class="s0">import </span><span class="s1">db</span>
+<span class="s0">from </span><span class="s1">models </span><span class="s0">import </span><span class="s1">Tarea</span>
+
+<span class="s1">app = Flask(__name__) </span><span class="s2"># En app se encuentra nuestro servidor web de Flask, app es</span>
+<span class="s2">#el nombre recomendado. Con este trocito de codigo Flask me levanta  un servidor web</span>
+<span class="s2"># pero dentro de mi ordenador.</span>
+
+<span class="s2">#Servidor web: un servidor web es un sistema operativo de linux (habitualmente a</span>
+<span class="s2">#nivel de servidor todo es practicamente Linux.Que despliega una serie de programas</span>
+<span class="s2">#que hace que parte del almacenamiento de ese ordenador no sea local, si no que se</span>
+<span class="s2">#pueda ver a traves de internet. A traves de una direcion IP. Por todo el mundo hay</span>
+<span class="s2">#unos servidores DNS que en funcion de nuestra ubicacion geografica, nuestro movil</span>
+<span class="s2"># se conecta al servidor DNS mas cercano, nuestro movil le pregunta al DNS</span>
+<span class="s2"># sabes quien es google.es y te responde con el IP. movil----&gt;DNS-----&gt;movil-----&gt;</span>
+<span class="s2">#--&gt;servidor web.</span>
+
+<span class="s2">#OJO Vamos a programar nuestra aplicacion de manera local NO ONLINE, pero se accede</span>
+<span class="s2">#desde nuestro navegador. Ejemplo: Jupyter, monta un servidor web y accedemos a esa</span>
+<span class="s2">#pagina web que el crea. Está almacenada dentro de nuestro sistema, desde el esterior</span>
+<span class="s2">#no se puede acceder.</span>
+
+<span class="s2">#------&gt;protocolo http---&gt;navegador, uno encima del otro es la</span>
+<span class="s2">#vinculacion que hace por nosotros, es la forma de crear URL.</span>
+
+<span class="s2"># La barra (el slash) se conoce como la página de inicio (página home).</span>
+<span class="s2"># Vamos a definir para esta ruta, el comportamiento a seguir.</span>
+<span class="s1">@app.route(</span><span class="s3">'/'</span><span class="s1">)</span>
+<span class="s0">def </span><span class="s1">home():</span><span class="s2">#------&gt; python</span>
+
+    <span class="s1">todas_las_tareas = db.session.query(Tarea).all()</span>
+
+    <span class="s0">for </span><span class="s1">i </span><span class="s0">in </span><span class="s1">todas_las_tareas:</span>
+        <span class="s1">print(i)</span>
+
+    <span class="s0">return </span><span class="s1">render_template(</span><span class="s3">&quot;index.html&quot;</span><span class="s0">,</span><span class="s1">lista_de_tareas=todas_las_tareas) </span><span class="s2">#Al hacer un render_template Flask va a estar</span>
+<span class="s2">#mirando a la carpeta template por defecto, sino nos dará un error.</span>
+
+<span class="s1">@app.route(</span><span class="s3">&quot;/crear-tarea&quot;</span><span class="s0">,</span><span class="s1">methods=[</span><span class="s3">&quot;POST&quot;</span><span class="s1">])</span>
+<span class="s0">def </span><span class="s1">crear():</span>
+
+    <span class="s1">tarea = Tarea(contenido=request.form[</span><span class="s3">&quot;contenido_tarea&quot;</span><span class="s1">]</span><span class="s0">, </span><span class="s1">hecha=</span><span class="s0">False</span><span class="s1">)</span>
+    <span class="s1">db.session.add(tarea)</span>
+    <span class="s1">db.session.commit()</span>
+    <span class="s0">return </span><span class="s1">redirect(url_for(</span><span class="s3">&quot;home&quot;</span><span class="s1">))</span>
+
+<span class="s1">@app.route(</span><span class="s3">&quot;/eliminar-tarea/&lt;id&gt;&quot;</span><span class="s1">)</span>
+<span class="s0">def </span><span class="s1">eliminar(id):</span>
+
+    <span class="s1">tarea= db.session.query(Tarea).filter_by(id=id).delete()</span>
+    <span class="s1">db.session.commit()</span>
+    <span class="s0">return </span><span class="s1">redirect(url_for(</span><span class="s3">&quot;home&quot;</span><span class="s1">))</span>
+
+<span class="s1">@app.route(</span><span class="s3">'/tarea-hecha/&lt;id&gt;'</span><span class="s1">)</span>
+<span class="s0">def </span><span class="s1">hecha(id):</span>
+    <span class="s1">tarea = db.session.query(Tarea).filter_by(id=int(id)).first() </span><span class="s2"># Se obtiene la tarea que se busca</span>
+    <span class="s1">tarea.hecha = </span><span class="s0">not</span><span class="s1">(tarea.hecha) </span><span class="s2"># Guardamos en la variable booleana de la tarea, su contrario</span>
+    <span class="s1">db.session.commit() </span><span class="s2"># Ejecutar la operación pendiente de la base de datos</span>
+    <span class="s0">return </span><span class="s1">redirect(url_for(</span><span class="s3">'home'</span><span class="s1">)) </span><span class="s2"># Esto nos redirecciona a la función home()</span>
+
+<span class="s0">if </span><span class="s1">__name__ == </span><span class="s3">'__main__'</span><span class="s1">:</span>
+
+    <span class="s1">db.Base.metadata.create_all(db.engine)</span>
+    <span class="s1">app.run(debug=</span><span class="s0">True</span><span class="s1">)</span>
+
+
+
+
+
+
+
+
+<span class="s2">#El debug=True hace que cada vez que reiniciemos el</span>
+<span class="s2">#servidor o modifiquemos codigo, el servidor de Flask se reinicie solo. Si hay</span>
+<span class="s2">#errores nos lo muestra por consola. Con app.run arranca el servidor.</span>
+
+<span class="s2">#localhost= 120.0.0.1, hace referencia a nosotros mismo siempre esta IP.</span>
+<span class="s2">#Todo lo que tenga que ver con la web tendra un IP y un puerto, distintas puertas</span>
+<span class="s2">#por las que podremos establecer comunicaciones, los puertos vienen de los protocolos</span>
+<span class="s2">#de red. HTTP--&gt;80. HTTPS----&gt;8080.</span>
+
+<span class="s2">#Una vez que hemos arrancado el servidor ya no podemos hacer nada en el terminal,</span>
+<span class="s2">#nos aparece un listado con las codigos de error o no, el codigo 200</span>
+<span class="s2">#es que todo ha salido bien. Pero con ctrl C cancelo esa ejecucion del servidor</span>
+<span class="s2">#y me vuelve a aparecer el ven.</span>
+
+
+
+
+
+
+<span class="s2">#Vamos a usar framework, que son algo mas que una libreria que nos proporcionan unas</span>
+<span class="s2">#funcionalidades especificas, el framework tiene normas para trabajar  a diferencia</span>
+<span class="s2">#de las librerias.</span>
+
+<span class="s2">#En las paginas web no todo lo hace python sino que debe comunicarse con otras</span>
+<span class="s2">#tecnologias abyacentes,partes para poder dar forma a la pagina web. Es dificil</span>
+<span class="s2">#entender todas las partes de esta practica en profundidad.</span>
+<span class="s2">#¿COMO LLEGO A LA FUNCION CREAR? ¿Lo que tengo en el input en HTML como lo leo desde Python para que ese</span>
+<span class="s2">#input me llegue a la variable contenido? ¿puedo desde mi fichero Python leer información de mi fichero index.html?SI,</span>
+<span class="s2">#pero no toda la información, por ejemplo, puedo leer la información que tengo dentro de los formularios. ¿Como puedo</span>
+<span class="s2">#acceder a un elemento concreto de mi formulario? Con la variable name que acabo de crear, a traves del metodo de Flask</span>
+<span class="s2">#request.form[&quot;nombre de variable del formulario contenido_tarea en este ejemplo&quot;]</span>
+
+<span class="s2">#Ahora como podemos trasladar la lista de objetos de nuestra consulta a HTML si en</span>
+<span class="s2">#HTML no se puede escribir codigo sino es con lenguaje javascrip (es el que se usa</span>
+<span class="s2">#por defecto) pues con jinja2, que nos permite escribir codigo en HTML pero cosas</span>
+<span class="s2">#muy basicas.Ojo aqui se produce un error comun, es que cuando quiero trabajar con</span>
+<span class="s2">#sqlalchemy y HTML le tengo que decir a la BDD que trabeje siempre en segundo plano</span>
+<span class="s2">#trabajar en background, en el create</span></pre>
+</body>
+</html>

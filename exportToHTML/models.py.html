@@ -1,0 +1,45 @@
+<html>
+<head>
+<title>models.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+.s3 { color: #808080;}
+.s4 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+models.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">db</span>
+<span class="s0">from </span><span class="s1">sqlalchemy </span><span class="s0">import </span><span class="s1">Column</span><span class="s0">, </span><span class="s1">Integer</span><span class="s0">, </span><span class="s1">String</span><span class="s0">, </span><span class="s1">Boolean</span>
+
+
+<span class="s2">&quot;&quot;&quot;Creamos una clase llamada Tarea 
+Esta clase va a ser nuestro modelo de datos de la tarea (el cual nos servirá 
+luego para la base de datos) 
+Esta clase va a almacenar toda la información referente a una tarea&quot;&quot;&quot;</span>
+
+<span class="s0">class </span><span class="s1">Tarea(db.Base):</span>
+   <span class="s1">__tablename__ = </span><span class="s2">&quot;tarea&quot;</span>
+   <span class="s1">id = Column(Integer</span><span class="s0">, </span><span class="s1">primary_key=</span><span class="s0">True</span><span class="s1">) </span><span class="s3"># Identificador único de cada tarea</span>
+   <span class="s3">#(no puede haber dos tareas con el mismo id, por eso es primary key)</span>
+   <span class="s1">contenido = Column(String(</span><span class="s4">200</span><span class="s1">)</span><span class="s0">, </span><span class="s1">nullable=</span><span class="s0">False</span><span class="s1">) </span><span class="s3"># Contenido de la tarea, un</span>
+   <span class="s3">#texto de máximo 200 caracteres.</span>
+   <span class="s1">hecha = Column(Boolean) </span><span class="s3"># Booleano que indica si una tarea ha sido hecha o no</span>
+<span class="s0">def </span><span class="s1">__init__(self</span><span class="s0">, </span><span class="s1">contenido</span><span class="s0">, </span><span class="s1">hecha):</span>
+   <span class="s3">#Recordemos que el id no es necesario crearlo manualmente, lo añade la</span>
+   <span class="s3">#base de datos automaticamente</span>
+   <span class="s1">self.contenido = contenido</span>
+   <span class="s1">self.hecha = hecha</span>
+<span class="s0">def </span><span class="s1">__repr__(self):</span>
+    <span class="s0">return </span><span class="s2">&quot;Tarea {}: {} ({})&quot;</span><span class="s1">.format(self.id</span><span class="s0">, </span><span class="s1">self.contenido</span><span class="s0">, </span><span class="s1">self.hecha)</span>
+<span class="s0">def </span><span class="s1">__str__(self):</span>
+    <span class="s0">return </span><span class="s2">&quot;Tarea {}: {} ({})&quot;</span><span class="s1">.format(self.id</span><span class="s0">, </span><span class="s1">self.contenido</span><span class="s0">, </span><span class="s1">self.hecha)</span></pre>
+</body>
+</html>

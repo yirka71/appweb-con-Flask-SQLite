@@ -1,0 +1,30 @@
+body{
+     background: #d9a7c7;  /* fallback for old browsers */
+     background: -webkit-linear-gradient(to right, #fffcdc, #d9a7c7);  /* Chrome 10-25, Safari 5.1-6 */
+     background: linear-gradient(to right, #fffcdc, #d9a7c7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+
+.titulo {
+   font-family: 'Permanent Marker', cursive;
+}
+.tarea_hecha {
+       text-decoration: line-through;
+       color: #cfcfcf;
+}
+<!--si nuestro html principal se llama index.html el css principal se llamara
+ main.css, que será nuestra hoja de estilo de nuestra pagina web, suele albergar
+ el estilo de todo nuestro proyecto-->
+
+<!--Haciendo referencia al nombre de la etiqueta aplico el estilo a todas las
+  etiquetas con ese nombre-->
+
+<!--.titulo es como si fuera una variable, cada vez que invoco esta varieble, se me va a aplicar este estilo-->
+<!--.titulo es como si fuera una variable, cada vez que invoco esta varieble, se me va a aplicar este estilo-->
+
+<!--OJO MUY IMPORTANTE: Los navegadores tiran de los ultimos cambios almacenados
+ en su memoria cache para navegar mas rapido por la web, pero es el peor
+ enemigo para desarolladores web, ya que si aplicamos cambios en nuestro html o css
+ no los vemos, consejo usar navegador como google chrome, firefox,
+  chrome en particular tiene un acceso por teclado mmuy bueno ( ctrl+shift+R) que
+  carga la pagina web sin tener en cuenta la memoria cache, desde 0-->
